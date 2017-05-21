@@ -43,7 +43,7 @@ class Book < ApplicationRecord
     params = {
       "orderType" => 0,
       "pageIndex" => 1,
-      "schText" =>
+      "schText" => ""
     }
     headers = {
       "Accept" => "*/*",
