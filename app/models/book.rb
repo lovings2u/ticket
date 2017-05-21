@@ -38,10 +38,24 @@ class Book < ApplicationRecord
     end
   end
 
-  def create_melon_ticket_info
+  def self.create_melon_ticket_info
     uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm?orderType=0&pageIndex=1&schText='
     params = {}
-    result = RestClient.post uri, params
+    headers = {
+      "Accept" => "*/*",
+      "Accept-Encoding" => "gzip, deflate",
+      "Accept-Language" => "ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4",
+      "Connection" => "keep-alive",
+      "Content-Length" => "32",
+      "Content-Type" => "application/x-www-form-urlencoded; charset=UTF-8",
+      "Cookie" => "SCOUTER=z5gppkos3df67t; PCID=14951734126572201067300; WMONID=Df9CR6RuzEU; TKT_POC_ID=MP15",
+      "Host" => "ticket.melon.com",
+      "Origin" => "http://ticket.melon.com",
+      "Referer" => "http://ticket.melon.com/csoon/index.htm",
+      "User-Agent" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36",
+      "X-Requested-With" =>"XMLHttpRequest"
+    }
+    result = RestClient.post uri, params, headers
     result = Nokogiri::HTML(result)
 
     result.css('a.tit').each do |r|
