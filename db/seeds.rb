@@ -151,6 +151,6 @@ end
 # end
 
 Book.create_interpark_ticket_info
-Book.create_melon_ticket_info
+create_melon_ticket_info
 Book.create_auction_ticket_info
 Book.create_yes24_ticket_info
