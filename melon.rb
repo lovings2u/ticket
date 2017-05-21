@@ -3,12 +3,12 @@ require 'open-uri'
 require 'rest_client'
 
 
-uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
+uri = 'http://ticket.melon.com/csoon/index.htm'
 params = {
   "pageIndex" => 1,
   "orderType" => 0
 }
-result = RestClient.post uri, params
+result = RestClient.get uri
 result = Nokogiri::HTML(result)
 
 result.css('span.date').each do |r|
@@ -16,12 +16,13 @@ result.css('span.date').each do |r|
   puts Time.parse(r.text)
 end
 #
-# result.css('a.tit').each do |r|
-#   href = r['href'].gsub!('./','')
-#   uri = "http://ticket.melon.com/csoon/" + href
-#   detail = Nokogiri::HTML(open(uri))
-#   info = detail.css('div.section_ticketopen_view')
-#   puts "공연명 #{info.css('p.tit_consert').text}"
-#   puts info.css('ul.data_txt').text
-#   puts info.css('div.box_consert_thumb img')[0]['src']
-# end
+puts result
+result.css('a.tit').each do |r|
+  href = r['href'].gsub!('./','')
+  uri = "http://ticket.melon.com/csoon/" + href
+  detail = Nokogiri::HTML(open(uri))
+  info = detail.css('div.section_ticketopen_view')
+  puts "공연명 #{info.css('p.tit_consert').text}"
+  puts info.css('ul.data_txt').text
+  puts info.css('div.box_consert_thumb img')[0]['src']
+end

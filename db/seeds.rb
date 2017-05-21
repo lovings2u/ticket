@@ -34,11 +34,8 @@
 # end
 #
 def create_melon_ticket_info
-  uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
-  params = {
-    "pageIndex" => 1,
-    "orderType" => 0
-  }
+  uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm?orderType=0&pageIndex=1&schText='
+  params = {}
   result = RestClient.post uri, params
   result = Nokogiri::HTML(result)
 
@@ -47,9 +44,7 @@ def create_melon_ticket_info
     uri = "http://ticket.melon.com/csoon/" + href
     detail = Nokogiri::HTML(open(uri))
     info = detail.css('div.section_ticketopen_view')
-    puts "공연명 #{info.css('p.tit_consert').text}"
-    puts info.css('ul.data_txt').text
-    puts info.css('div.box_consert_thumb img')[0]['src']
+    puts "#{info.css('p.tit_consert').text}"
     Book.create(
       concert_name: info.css('p.tit_consert').text,
       site_url: uri,

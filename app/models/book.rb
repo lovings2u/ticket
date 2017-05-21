@@ -38,22 +38,18 @@ class Book < ApplicationRecord
     end
   end
 
-  def self.create_melon_ticket_info
-    uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
-    params = {
-      "pageIndex" => 1,
-      "orderType" => 0
-    }
+  def create_melon_ticket_info
+    uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm?orderType=0&pageIndex=1&schText='
+    params = {}
     result = RestClient.post uri, params
     result = Nokogiri::HTML(result)
-    puts "101"
+
     result.css('a.tit').each do |r|
       href = r['href'].gsub!('./','')
       uri = "http://ticket.melon.com/csoon/" + href
       detail = Nokogiri::HTML(open(uri))
       info = detail.css('div.section_ticketopen_view')
       puts "#{info.css('p.tit_consert').text}"
-      puts "103"
       Book.create(
         concert_name: info.css('p.tit_consert').text,
         site_url: uri,
@@ -63,7 +59,6 @@ class Book < ApplicationRecord
         tc_key: "2-#{uri.split('=').last}"
       )
     end
-    puts "105"
     count = -1
     book = Book.where(source_site: 2)
     result.css('span.date').each do |r|
@@ -71,8 +66,8 @@ class Book < ApplicationRecord
       book[count].update(
         open_date: Time.parse(r.text)
       )
+      puts r.text
     end
-    puts "110"
   end
 
   def self.create_auction_ticket_info
