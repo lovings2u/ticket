@@ -33,42 +33,42 @@
 #   end
 # end
 #
-# def create_melon_ticket_info
-#   uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
-#   params = {
-#     "pageIndex" => 1,
-#     "orderType" => 0
-#   }
-#   result = RestClient.post uri, params
-#   result = Nokogiri::HTML(result)
-#
-#   result.css('a.tit').each do |r|
-#     href = r['href'].gsub!('./','')
-#     uri = "http://ticket.melon.com/csoon/" + href
-#     detail = Nokogiri::HTML(open(uri))
-#     info = detail.css('div.section_ticketopen_view')
-#     puts "공연명 #{info.css('p.tit_consert').text}"
-#     puts info.css('ul.data_txt').text
-#     puts info.css('div.box_consert_thumb img')[0]['src']
-#     Book.create(
-#       concert_name: info.css('p.tit_consert').text,
-#       site_url: uri,
-#       image_url: info.css('div.box_consert_thumb img')[0]['src'],
-#       detail_info: info.css('ul.data_txt').text,
-#       source_site: 2,
-#       tc_key: "2-#{uri.split('=').last}"
-#     )
-#   end
-#   count = -1
-#   book = Book.where(source_site: 2)
-#   result.css('span.date').each do |r|
-#     next unless r.text.start_with?("2017") & count+=1
-#     book[count].update(
-#       open_date: Time.parse(r.text)
-#     )
-#     puts r.text
-#   end
-# end
+def create_melon_ticket_info
+  uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
+  params = {
+    "pageIndex" => 1,
+    "orderType" => 0
+  }
+  result = RestClient.post uri, params
+  result = Nokogiri::HTML(result)
+
+  result.css('a.tit').each do |r|
+    href = r['href'].gsub!('./','')
+    uri = "http://ticket.melon.com/csoon/" + href
+    detail = Nokogiri::HTML(open(uri))
+    info = detail.css('div.section_ticketopen_view')
+    puts "공연명 #{info.css('p.tit_consert').text}"
+    puts info.css('ul.data_txt').text
+    puts info.css('div.box_consert_thumb img')[0]['src']
+    Book.create(
+      concert_name: info.css('p.tit_consert').text,
+      site_url: uri,
+      image_url: info.css('div.box_consert_thumb img')[0]['src'],
+      detail_info: info.css('ul.data_txt').text,
+      source_site: 2,
+      tc_key: "2-#{uri.split('=').last}"
+    )
+  end
+  count = -1
+  book = Book.where(source_site: 2)
+  result.css('span.date').each do |r|
+    next unless r.text.start_with?("2017") & count+=1
+    book[count].update(
+      open_date: Time.parse(r.text)
+    )
+    puts r.text
+  end
+end
 #
 # def create_auction_ticket_info
 #   uri = 'http://ticket1.auction.co.kr/Notice/List?Page=1'
