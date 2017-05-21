@@ -41,8 +41,8 @@ class Book < ApplicationRecord
   def self.create_melon_ticket_info
     uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
     params = {
-      "orderType" => 0,
-      "pageIndex" => 1,
+      "orderType" => "0",
+      "pageIndex" => "1",
       "schText" => ""
     }
     headers = {
