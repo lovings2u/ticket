@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get '/search_ticket' => 'ticket_info#each_ticket_info'
       get '/tickets' => 'ticket_info#tickets'
       get '/one_ticket' => 'ticket_info#search_ticket'
+      get '/search_by_name' => 'ticket_info#search_ticket_by_name'
     end
   end
 end

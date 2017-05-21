@@ -19,6 +19,6 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every 1.minute do
+every 1.day, at: '06:00 am' do
 	runner "Book.update_info"
 end
