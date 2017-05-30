@@ -27,7 +27,7 @@ class Api::V1::TicketInfoController < ApiController
   end
 
   def search_ticket_by_name
-    tickets = Book.where("concert_name LIKE ?", "%#{params[:query]}%")
+    tickets = Book.where("concert_name LIKE ? OR detail_info LIKE ?", "%#{params[:query]}%", "%#{params[:query]}%")
     get_result(tickets)
     render json: @result
   end
