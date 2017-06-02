@@ -21,7 +21,7 @@ class Api::V1::TicketInfoController < ApiController
   end
 
   def tickets
-    tickets = Book.all.order("open_date DESC").offset(params[:page_no]).limit(params[:per_page])
+    tickets = Book.all.order("id DESC").offset(params[:page_no]).limit(params[:per_page])
     get_result(tickets)
     render json: @result
   end
