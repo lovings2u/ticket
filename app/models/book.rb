@@ -26,15 +26,19 @@ class Book < ApplicationRecord
       # puts Time.parse(r.css('dd').text)
       uri = r['href']
       detail = Nokogiri::HTML(open(uri))
-      Book.create(
-        concert_name: detail.css('div.contents strong').text,
-        open_date: Time.parse("20#{r.css('dd').text}"),
-        site_url: uri,
-        image_url: detail.css('img#mainPostImg')[0]['src'],
-        detail_info: detail.css('div.data').text,
-        source_site: 1,
-        tc_key: "1-#{uri.split('=').last}"
-      )
+      begin
+        Book.create(
+          concert_name: detail.css('div.contents strong').text,
+          open_date: Time.parse("20#{r.css('dd').text}"),
+          site_url: uri,
+          image_url: detail.css('img#mainPostImg')[0]['src'],
+          detail_info: detail.css('div.data').text,
+          source_site: 1,
+          tc_key: "1-#{uri.split('=').last}"
+        )
+      rescue
+        next
+      end
     end
   end
 
@@ -45,15 +49,19 @@ class Book < ApplicationRecord
     result["data"]["LIST"].each do |r|
       info = Nokogiri::HTML(r["infoPerf"])
       puts r["title"]
-      Book.create(
-        concert_name: r["title"],
-        open_date: Time.parse(r["openDt"]),
-        image_url: "http://cdnticket.melon.co.kr#{r["posterUrl"]}",
-        site_url: "http://ticket.melon.com/csoon/detail.htm?csoonId=#{r["csoonId"]}",
-        detail_info: info.text,
-        source_site: 2,
-        tc_key: "2-#{r['csoonId']}"
-      )
+      begin
+        Book.create(
+          concert_name: r["title"],
+          open_date: Time.parse(r["openDt"]),
+          image_url: "http://cdnticket.melon.co.kr#{r["posterUrl"]}",
+          site_url: "http://ticket.melon.com/csoon/detail.htm?csoonId=#{r["csoonId"]}",
+          detail_info: info.text,
+          source_site: 2,
+          tc_key: "2-#{r['csoonId']}"
+        )
+      rescue
+        next
+      end
     end
     # uri = 'http://ticket.melon.com/csoon/ajax/listTicketOpen.htm'
     # params = {
@@ -115,6 +123,7 @@ class Book < ApplicationRecord
       a_tag = r.css('td.cell3 a')
       puts a_tag.text
       uri = a_tag[0]['href'].split('\'')[5]
+      begin
       if r.css('td.cell4').inner_text.include?("오후")
         time = Time.parse(r.css('td.cell4').inner_text) + 60*60*12
       else
@@ -126,15 +135,18 @@ class Book < ApplicationRecord
       # puts info[1].text.chomp
       # puts detail.css('td.cell4').text
       d_info = detail.css('div.detail_info_block')[0].text + detail.css('div.detail_info_block')[1].text
-      Book.create(
-        concert_name: a_tag.text,
-        open_date: time,
-        site_url: uri,
-        image_url: detail.css('img.lazy')[0]['src'],
-        detail_info: d_info,
-        source_site: 3,
-        tc_key: "3-#{uri.split('=').last}"
-      )
+        Book.create(
+          concert_name: a_tag.text,
+          open_date: time,
+          site_url: uri,
+          image_url: detail.css('img.lazy')[0]['src'],
+          detail_info: d_info,
+          source_site: 3,
+          tc_key: "3-#{uri.split('=').last}"
+        )
+      rescue
+        next
+      end
     end
   end
 
