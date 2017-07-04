@@ -35,6 +35,10 @@ class Api::V1::TicketInfoController < ApiController
     @result = Book.find(params[:ticket_id])
     render json: @result
   end
+  def update_tickets
+    @message = Book.update_info
+    render json: @message
+  end
   private
   def get_result(tickets)
     @result = {

@@ -13,6 +13,7 @@ class Book < ApplicationRecord
     Book.create_yes24_ticket_info
     result_count = Book.all.count
     puts "#{original_count - result_count} tickets Created!"
+    "#{original_count - result_count} tickets Created!"
   end
 
   def self.create_interpark_ticket_info
