@@ -166,7 +166,7 @@ class Book < ApplicationRecord
       # puts a.text + " || "+ a['href'].split('id=')[1]
       next if a.text.include?("취소")
       puts a.text
-      url = 'http://ticket.yes24.com/Pages/Notice/NoticeMain.asp' + a['href']
+      url = 'http://ticket.yes24.com/Pages/Notice/NoticeMain.aspx' + a['href']
       uri = 'http://ticket.yes24.com/Pages/Notice/Ajax/Read.aspx'
       params = {
         "bid" => a['href'].split("id=")[1]
