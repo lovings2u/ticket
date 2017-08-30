@@ -171,21 +171,25 @@ class Book < ApplicationRecord
       params = {
         "bid" => a['href'].split("id=")[1]
       }
+      begin
       detail = Nokogiri::HTML(RestClient.post(uri, params))
       if detail.css('span#title1').text.include?("오후")
         time = Time.parse(detail.css('span#title1').text) + 12*60*60
       else
         time = Time.parse(detail.css('span#title1').text)
       end
-      Book.create(
-        concert_name: a.text,
-        open_date: time,
-        site_url: url,
-        image_url: detail.css('div.poster img')[0]['src'],
-        detail_info: detail.css('div.content div.notic').text,
-        source_site: 4,
-        tc_key: "4-#{url.split('=').last}"
-      )
+        Book.create(
+          concert_name: a.text,
+          open_date: time,
+          site_url: url,
+          image_url: detail.css('div.poster img')[0]['src'],
+          detail_info: detail.css('div.content div.notic').text,
+          source_site: 4,
+          tc_key: "4-#{url.split('=').last}"
+        )
+      rescue
+        next
+      end
     end
   end
 end
